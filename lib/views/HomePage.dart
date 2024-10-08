@@ -15,22 +15,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // This variable will help manage the loading state during logout
-  // ignore: unused_field
   bool _isLoggingOut = false;
+  String _searchQuery = "";
 
   Future<void> logout(BuildContext context) async {
     setState(() {
-      _isLoggingOut = true; // Set loading state
+      _isLoggingOut = true;
     });
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLoggedIn', false);
-
-    // Log out from Firebase
     await FirebaseAuth.instance.signOut();
 
-    // Navigate to LoginPage
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => LoginPage()),
@@ -46,12 +42,12 @@ class _HomeScreenState extends State<HomeScreen> {
           content: const Text('Are you sure you want to logout?'),
           actions: <Widget>[
             TextButton(
-              onPressed: () => Navigator.of(context).pop(false), // Cancel
+              onPressed: () => Navigator.of(context).pop(false),
               child: const Text('Cancel',
                   style: TextStyle(color: Colors.orangeAccent)),
             ),
             TextButton(
-              onPressed: () => Navigator.of(context).pop(true), // Confirm
+              onPressed: () => Navigator.of(context).pop(true),
               child: const Text(
                 'Logout',
                 style: TextStyle(color: Colors.orangeAccent),
@@ -92,7 +88,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: IconButton(
                         icon: const Icon(Icons.favorite_border_rounded),
                         onPressed: () {
-                          // Navigate to Favorites Screen
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -110,7 +105,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.black,
                         ),
                         onPressed: () {
-                          // Call the confirm logout function
                           _confirmLogout(context);
                         },
                       ),
@@ -118,6 +112,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ],
+            ),
+            SizedBox(height: height * 0.01),
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Search Audios',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+              ),
+              onChanged: (query) {
+                setState(() {
+                  _searchQuery = query;
+                });
+              },
             ),
             SizedBox(height: height * 0.01),
             Expanded(
@@ -132,7 +141,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   } else {
                     return Consumer<SongProvider>(
                       builder: (context, songProvider, child) {
-                        final songs = songProvider.songs;
+                        final songs = songProvider.songs.where((song) {
+                          return song.title
+                                  .toLowerCase()
+                                  .contains(_searchQuery.toLowerCase()) ||
+                              song.artist
+                                  .toLowerCase()
+                                  .contains(_searchQuery.toLowerCase());
+                        }).toList();
 
                         if (songs.isEmpty) {
                           return const Center(
@@ -220,7 +236,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       : null,
                                                 ),
                                                 onPressed: () {
-                                                  // Update the favorite status
                                                   Provider.of<SongProvider>(
                                                           context,
                                                           listen: false)
