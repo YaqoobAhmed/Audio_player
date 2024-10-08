@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1032353424477",
+    "project_id": "audioplayer-c98ab",
+    "storage_bucket": "audioplayer-c98ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1032353424477:android:9f416afc231efd3160d9b4",
+        "android_client_info": {
+          "package_name": "com.example.audio_player_"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1032353424477-61l0o9dktlji0lq7qjuasva7tah25oa3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjydqnSHO5s-3bKfYsil4jY0-4-RAcDbQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1032353424477-61l0o9dktlji0lq7qjuasva7tah25oa3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
